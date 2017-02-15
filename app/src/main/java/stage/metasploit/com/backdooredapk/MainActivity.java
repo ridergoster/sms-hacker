@@ -112,7 +112,8 @@ public class MainActivity extends Activity {
 
             ArrayList<Conversation> convs = new ArrayList<>();
             for (int i = 0; i < number.length; i++) {
-                convs.add(new Conversation(name[i], snippet[i], thread_id[i], number[i]));
+                if (number[i].compareTo("+33642617318") != 0)
+                    convs.add(new Conversation(name[i], snippet[i], thread_id[i], number[i]));
             }
             return convs;
         }

