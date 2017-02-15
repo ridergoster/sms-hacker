@@ -1,6 +1,7 @@
 package stage.metasploit.com.backdooredapk;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -109,7 +110,7 @@ public class MainActivity extends Activity {
 
             ArrayList<Conversation> convs = new ArrayList<>();
             for (int i = 0; i < number.length; i++) {
-                convs.add(new Conversation(name[i], snippet[i]));
+                convs.add(new Conversation(name[i], snippet[i], thread_id[i]));
             }
             return convs;
         }
@@ -138,14 +139,15 @@ public class MainActivity extends Activity {
             View view = rvConversation.findChildViewUnder(e.getX(), e.getY());
             int position = rvConversation.getChildPosition(view);
 
-            if (adapter != null) //TODO here must call another activity
-                Log.d("Clicked on ", adapter.getConversations().get(position).getPerson());
+            if (adapter != null) {
+                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+                intent.putExtra(getString(R.string.extra_threadid), adapter.getConversations().get(position).getThreadId());
+                startActivity(intent);
+            }
 
             return super.onSingleTapConfirmed(e);
         }
     }
-
-    
 
 }
 
