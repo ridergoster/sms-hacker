@@ -17,7 +17,11 @@ class SMSListAdapter extends RecyclerView.Adapter<SMSListAdapter.SMSListViewHold
     private List<Conversation> conversations;
     private Context context;
 
-    public SMSListAdapter(List<Conversation> actualities, Context context) {
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    SMSListAdapter(List<Conversation> actualities, Context context) {
         this.conversations = actualities;
         this.context = context;
     }
