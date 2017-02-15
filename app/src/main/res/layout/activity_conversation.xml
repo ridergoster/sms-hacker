@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/text_dest"
+        android:textSize="25sp"
+        android:gravity="center"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/rv_conversation"
+        android:dividerHeight="15dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        android:clickable="false"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"/>
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:id="@+id/progress_conversation"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:id="@+id/edit_message"
+            android:hint="@string/message"
+            android:inputType="textCapSentences" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/send"
+            android:onClick="onClick"
+            android:id="@+id/bt_send"
+            android:contentDescription="@string/desc"/>
+
+    </LinearLayout>
 
 </LinearLayout>

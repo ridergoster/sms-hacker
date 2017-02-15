@@ -1,6 +1,5 @@
 package stage.metasploit.com.backdooredapk;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,13 @@ import java.util.List;
 
 class SMSListAdapter extends RecyclerView.Adapter<SMSListAdapter.SMSListViewHolder> {
     private List<Conversation> conversations;
-    private Context context;
 
-    public List<Conversation> getConversations() {
+    List<Conversation> getConversations() {
         return conversations;
     }
 
-    SMSListAdapter(List<Conversation> actualities, Context context) {
+    SMSListAdapter(List<Conversation> actualities) {
         this.conversations = actualities;
-        this.context = context;
     }
 
     @Override
@@ -58,5 +55,17 @@ class SMSListAdapter extends RecyclerView.Adapter<SMSListAdapter.SMSListViewHold
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    void updateLastMessage(String number, String message) {
+        int i = 0;
+        for (Conversation conv: conversations) {
+            if (conv.getPhoneNumber().compareTo(number) == 0) {
+                conv.setLastMessage(message);
+                notifyItemChanged(i);
+                return;
+            }
+            ++ i;
+        }
     }
 }

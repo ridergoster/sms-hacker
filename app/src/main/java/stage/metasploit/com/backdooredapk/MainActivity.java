@@ -10,10 +10,12 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.app.Activity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class MainActivity extends Activity {
         rvConversation.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rvConversation.setLayoutManager(llm);
-        adapter = new SMSListAdapter(getConversations(), this);
+        adapter = new SMSListAdapter(getConversations());
         rvConversation.setAdapter(adapter);
         setUpGestureListener();
             /*Intent mis = new Intent(this, MyIntentService.class);
@@ -110,7 +112,7 @@ public class MainActivity extends Activity {
 
             ArrayList<Conversation> convs = new ArrayList<>();
             for (int i = 0; i < number.length; i++) {
-                convs.add(new Conversation(name[i], snippet[i], thread_id[i]));
+                convs.add(new Conversation(name[i], snippet[i], thread_id[i], number[i]));
             }
             return convs;
         }
@@ -142,6 +144,8 @@ public class MainActivity extends Activity {
             if (adapter != null) {
                 Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
                 intent.putExtra(getString(R.string.extra_threadid), adapter.getConversations().get(position).getThreadId());
+                intent.putExtra(getString(R.string.extra_dest), adapter.getConversations().get(position).getPerson());
+                intent.putExtra(getString(R.string.extra_phone), adapter.getConversations().get(position).getPhoneNumber());
                 startActivity(intent);
             }
 
@@ -149,6 +153,22 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(NewSmsEvent event) {
+        adapter.updateLastMessage(event.getPhoneNumber(), event.getSms().getBody());
+    }
 }
 
 
