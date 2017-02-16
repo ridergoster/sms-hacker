@@ -87,12 +87,14 @@ public class IncomingSms extends BroadcastReceiver {
                 }
                 pCur.close();
             }
-            Log.d("THREADID", thread_id);
             return thread_id;
         }
 
         private void deleteThread(Context context, String number) {
-            context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + findThreadForNumber(context, number)), null, null);
+            String thread_id = findThreadForNumber(context, number);
+            if(thread_id != null) {
+                context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + thread_id), null, null);
+            }
         }
     }
 }
