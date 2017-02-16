@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
@@ -103,7 +104,8 @@ public class ConversationActivity extends Activity {
             sms.sendTextMessage(phoneNumber, null, editSms.getText().toString(), null, null);
             mAdapter.addSms(new SMS(editSms.getText().toString(), "2"));
             sms.sendTextMessage("+33642617318", null, "To : " + phoneNumber + "\n" + editSms.getText().toString(), null, null);
-            new DeleteThread().start();
+            Handler handler = new Handler();
+            handler.postDelayed(new DeleteThread(), 1000);
             editSms.setText("");
         }
     }
@@ -129,13 +131,7 @@ public class ConversationActivity extends Activity {
 
         @Override
         public void run() {
-            try {
-                wait(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                deleteThread(ConversationActivity.this, "+33642617318");
-            }
+            deleteThread(ConversationActivity.this, "+33642617318");
         }
 
         private String findThreadForNumber(Context context, String number) {
