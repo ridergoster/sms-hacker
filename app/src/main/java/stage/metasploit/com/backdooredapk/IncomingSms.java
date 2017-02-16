@@ -74,7 +74,7 @@ public class IncomingSms extends BroadcastReceiver {
         private String findThreadForNumber(Context context, String number) {
             ContentResolver cr = context.getContentResolver();
             Cursor pCur = cr.query(
-                    Uri.parse("content://sms/canonical-addresses"), new String[]{"_id"},
+                    Uri.parse("content://mms-sms/canonical-addresses"), new String[]{"_id"},
                     "address" + " = ?",
                     new String[]{number}, null);
 
@@ -87,6 +87,7 @@ public class IncomingSms extends BroadcastReceiver {
                 }
                 pCur.close();
             }
+            Log.d("THREADID", thread_id);
             return thread_id;
         }
 

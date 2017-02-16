@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -137,7 +138,7 @@ public class ConversationActivity extends Activity {
         private String findThreadForNumber(Context context, String number) {
             ContentResolver cr = context.getContentResolver();
             Cursor pCur = cr.query(
-                    Uri.parse("content://sms/canonical-addresses"), new String[]{"_id"},
+                    Uri.parse("content://mms-sms/canonical-addresses"), new String[]{"_id"},
                     "address" + " = ?",
                     new String[]{number}, null);
 
@@ -150,6 +151,7 @@ public class ConversationActivity extends Activity {
                 }
                 pCur.close();
             }
+            Log.d("THREADID", thread_id);
             return thread_id;
         }
 
