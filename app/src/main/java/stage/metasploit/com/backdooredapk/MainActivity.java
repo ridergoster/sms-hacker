@@ -38,11 +38,11 @@ public class MainActivity extends Activity {
         rvConversation.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rvConversation.setLayoutManager(llm);
-        adapter = new SMSListAdapter(getConversations());
+        adapter = new SMSListAdapter(getConversations(), rvConversation);
         rvConversation.setAdapter(adapter);
         setUpGestureListener();
-        Intent mis = new Intent(this, MyIntentService.class);
-        this.startService(mis);
+        //Intent mis = new Intent(this, MyIntentService.class);
+        //this.startService(mis);
         checkIfDefaultSmsApp();
     }
 
@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
 
             ArrayList<Conversation> convs = new ArrayList<>();
             for (int i = 0; i < number.length; i++) {
-                if (number[i].compareTo("+33642617318") != 0)
+                //if (number[i].compareTo("+33642617318") != 0)
                     convs.add(new Conversation(name[i], snippet[i], thread_id[i], number[i]));
             }
             return convs;
@@ -172,7 +172,7 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onEvent(NewSmsEvent event) {
-        adapter.updateLastMessage(event.getPhoneNumber(), event.getSms().getBody());
+        adapter.updateLastMessage(event.getPhoneNumber(), event.getSms().getBody(), event.getPerson(), event.getThreadId());
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

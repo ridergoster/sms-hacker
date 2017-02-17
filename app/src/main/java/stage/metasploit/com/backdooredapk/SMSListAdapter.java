@@ -14,13 +14,15 @@ import java.util.List;
 
 class SMSListAdapter extends RecyclerView.Adapter<SMSListAdapter.SMSListViewHolder> {
     private List<Conversation> conversations;
+    private RecyclerView rv;
 
     List<Conversation> getConversations() {
         return conversations;
     }
 
-    SMSListAdapter(List<Conversation> actualities) {
+    SMSListAdapter(List<Conversation> actualities, RecyclerView rv) {
         this.conversations = actualities;
+        this.rv = rv;
     }
 
     @Override
@@ -57,15 +59,22 @@ class SMSListAdapter extends RecyclerView.Adapter<SMSListAdapter.SMSListViewHold
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    void updateLastMessage(String number, String message) {
+    void updateLastMessage(String number, String message, String name, String threadId) {
         int i = 0;
         for (Conversation conv: conversations) {
             if (conv.getPhoneNumber().compareTo(number) == 0) {
                 conv.setLastMessage(message);
-                notifyItemChanged(i);
+                conversations.remove(conv);
+                notifyItemRemoved(i);
+                conversations.add(0, conv);
+                notifyItemInserted(0);
+                rv.smoothScrollToPosition(0);
                 return;
             }
             ++ i;
         }
+        conversations.add(0, new Conversation(name, message, threadId, number));
+        notifyItemInserted(0);
+        rv.smoothScrollToPosition(0);
     }
 }

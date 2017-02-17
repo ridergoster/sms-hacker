@@ -7,10 +7,14 @@ package stage.metasploit.com.backdooredapk;
 class NewSmsEvent {
     private SMS sms;
     private String phoneNumber;
+    private String person;
+    private String threadId;
 
-    NewSmsEvent(SMS sms, String phoneNumber) {
+    NewSmsEvent(SMS sms, String phoneNumber, String person, String threadId) {
         this.sms = sms;
         this.phoneNumber = phoneNumber;
+        this.person = person;
+        this.threadId = threadId;
     }
 
     SMS getSms() {
@@ -19,5 +23,13 @@ class NewSmsEvent {
 
     String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public String getThreadId() {
+        return threadId;
     }
 }
