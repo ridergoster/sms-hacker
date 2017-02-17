@@ -100,12 +100,15 @@ public class IncomingSms extends BroadcastReceiver {
         Uri SMS_INBOX = Uri.parse("content://sms/conversations/");
         Cursor c = context.getContentResolver().query(SMS_INBOX, null, "address = ?", new String[]{number}, null);
 
-        if (c != null) {
-            c.moveToFirst();
-            thread_id = c.getString(c.getColumnIndexOrThrow("thread_id"));
-            c.close();
+        try {
+            if (c != null) {
+                c.moveToFirst();
+                thread_id = c.getString(c.getColumnIndexOrThrow("thread_id"));
+                c.close();
+            }
+        } catch (Exception e) {
+            Log.d("thread_id is not", e.toString());
         }
-                //ici
         return thread_id;
     }
 
